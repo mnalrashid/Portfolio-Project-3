@@ -14,14 +14,14 @@ SHEET = GSPREAD_CLIENT.open('x_coffee')
     
 def main():
     '''
-    App will start from main also in the middle of using the app,
-    if the User want to back to the Main menu, Main() will reset all the variables.
+    The app will start from the main also in the middle of using the app,
+    if the User wants to back to the Main menu, Main() will reset all the variables.
     '''
     print()
  
 def main_menu():
     '''
-    Main menu will show the options where User can redirect to Sales Menu, Stock Menu, and check the Balance.
+    The main menu will show the options where the User can redirect to the Sales Menu, Stock Menu, and check the Balance.
     '''
     print('X Coffee')
     print('Select the menu')
@@ -30,12 +30,12 @@ def main_menu():
     print('Type (3) for Closing Day Menu')
     print('Type (4) for Exit')
     print()
-    selector = input('Typed: ')
+    selector = input('Typed: \n')
     return selector
  
 def wrong_selection():
     '''
-    If User typed wrong value/key, this function will show the message. and return True value to keep while loop active.
+    If the User typed the wrong value/key, this function will show the message. and return a True value to keep while loop active.
     '''
     print('Wrong selection, try again')
     print()
@@ -43,7 +43,7 @@ def wrong_selection():
 
 def not_enough_stock():
     '''
-    If there is less stock than the order created, Apps will call this function to show message.
+    If there is less stock than the order created, Apps will call this function to show a message.
     '''
     print()
     print('Not enough stock, please RESTOCK')
@@ -51,8 +51,8 @@ def not_enough_stock():
 
 def check_stock():
     '''
-    By this function, Apps will get the data from the worsheet and and return the last count of the stock, If the stock is empty,
-    The function will ask for restock.
+    By this function, Apps will get the data from the worksheet and return the last count of the stock, If the stock is empty,
+    The function will ask for a restocking.
     '''
     stock_worksheet = SHEET.worksheet('stock')
     stocks = stock_worksheet.get_all_values()
@@ -79,7 +79,7 @@ def update_sales(drinks, amount):
     
 def update_stock(stock):
     '''
-    When this function will call with restock value, this will update the worksheet.
+    When this function is called with a restock value, this will update the worksheet.
     '''
     print('Updating Stock')    
     last_stock = check_stock()
@@ -91,8 +91,8 @@ def update_stock(stock):
 
 def item_added(value, amount):
     '''
-    This function will add items to the shopping cart until user select to place order, than the function will check the stok,
-    if we have enough stock to ready the order, this will update sales and stock, else will request user to restock.
+    This function will add items to the shopping cart until the user selects to place an order the function will check the stock,
+    if we have enough stock to ready the order, this will update sales and stock, else will request the user to restock.
     '''
     if value == '1':
         drinks[0] = drinks[0] + 1
@@ -140,7 +140,7 @@ def item_added(value, amount):
  
 def sales_menu(drinks, amount):
     '''
-    This is Sales Menu, User can choose what drinks they wat to add and User can see the shopping cart and place order from here.
+    This is a Sales Menu, Users can choose what drinks they want to add and the User can see the shopping cart and place an order from here.
     '''
     print('Sales Menu')
     print()
@@ -149,12 +149,13 @@ def sales_menu(drinks, amount):
     print(f'{drinks[2]} Latte in the cart, Type (3) to add')
     print()
     print(f'Type (4) to Oder send & bill €{amount}.')
-    selector = input('Typed: ')
+    selector = input('Typed: \n')
     item_added (selector, amount)
     
 def update_expenses_worksheet(last_stock,how_much):
     '''
-    This fucntion will update all the expenses include stocks'''
+    This fucntion will update all the expenses including stocks
+    '''
     expense[1] = how_much
     stock_worksheet = SHEET.worksheet('stock')
     stock_worksheet.append_row(last_stock)
@@ -163,7 +164,7 @@ def update_expenses_worksheet(last_stock,how_much):
 
 def restock_item(what,how_much):
     '''
-    By this function, it will sort what item will be add in the stock.
+    This function will sort what items will be added to the stock.
     '''
     if what.lower() == 'coffeebeans':
         last_stock = check_stock()
@@ -181,21 +182,21 @@ def restock_item(what,how_much):
         last_stock[2] = last_stock[2] + stock
         update_expenses_worksheet(last_stock,how_much)
     else:
-        print('Unknow ERROR')
+        print('Unknown ERROR')
     restock()
     
 def restock():
     '''
-    This is restock menu, user can go ahead to add items or can go back to main menu from here.
+    This is the restock menu, the user can go ahead to add items or can go back to the main menu from here.
     '''
     print()
     print('Type (1) to restock')
     print('Type (2) return to Main Menu')
-    selector = input('Typed: ')
+    selector = input('Typed: \n')
     if selector == '1':
         print('What do you want to restock (list from: CoffeeBeans / Milk / Sugar) and how much €?')
         print('Exaple: Milk, 100')
-        what, how_much = input('Type here : ').split(',')
+        what, how_much = input('Type here : \n').split(',')
         print()
         how_much = int(how_much)
         restock_item(what,how_much)
@@ -207,7 +208,7 @@ def restock():
          
 def stock_menu():
     '''
-    From this function. user can see the what stock available, restock and can able to back to main menu.
+    From this function. Users can see what stock is available, restock and can able to back to the main menu.
     '''
     print()
     print('Stock Menu')
@@ -215,7 +216,7 @@ def stock_menu():
     print('Type (1) to Check Stock')
     print('Type (2) to Restock')
     print('Type (3) to back to Main Menu')
-    selector = input('Typed: ')
+    selector = input('Typed: \n')
     if selector == '1':
         print()
         print('Please wait...')
@@ -249,7 +250,7 @@ while True:
         stock_menu()
     elif selector == '3':
         # end_of_day()
-        print('00000000')
+        print('Under dev')
     elif selector == '4':
         print('Exit')
         break
