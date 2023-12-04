@@ -18,9 +18,9 @@ def main():
 def main_menu():
     print('X Coffee')
     print('Select the menu')
-    print('Type (1) for Sales')
-    print('Type (2) for Stock')
-    print('Type (3) for Closing count')
+    print('Type (1) for Sales Menu')
+    print('Type (2) for Stock Menu')
+    print('Type (3) for Closing Day Menu')
     print('Type (4) for Exit')
     print()
     selector = input('Typed: ')
@@ -57,7 +57,6 @@ def update_sales(drinks, amount):
 def update_stock(stock):
     print('Updating Stock')    
     last_stock = check_stock()
-    print(f'last stock count is {last_stock}')
     for x in range(len(last_stock)):
         last_stock[x] = last_stock[x] - stock[x]
     stock_worksheet = SHEET.worksheet('stock')
@@ -99,6 +98,12 @@ def item_added(value, amount):
                 else:
                     not_enough_stock()
                     restock()
+            else:
+                not_enough_stock()
+                restock()
+        else:
+            not_enough_stock()
+            restock()
     else:
         wrong_selection()
         sales_menu(drinks, amount)
@@ -117,17 +122,20 @@ def sales_menu(drinks, amount):
 def restock_item(what,how_much):
     if what.lower() == 'coffeebeans':
         last_stock = check_stock()
-        last_stock[0] = last_stock[0] + int(how_much)
+        how_much = int(how_much) * 80
+        last_stock[0] = last_stock[0] + how_much
         stock_worksheet = SHEET.worksheet('stock')
         stock_worksheet.append_row(last_stock)
     elif what.lower() == 'milk':
         last_stock = check_stock()
-        last_stock[1] = last_stock[1] + int(how_much)
+        how_much = int(how_much) * 200
+        last_stock[1] = last_stock[1] + how_much
         stock_worksheet = SHEET.worksheet('stock')
         stock_worksheet.append_row(last_stock)
     elif what.lower() == 'sugar':
         last_stock = check_stock()
-        last_stock[2] = last_stock[2] + int(how_much)
+        how_much = int(how_much) * 40
+        last_stock[2] = last_stock[2] + how_much
         stock_worksheet = SHEET.worksheet('stock')
         stock_worksheet.append_row(last_stock)
     else:
@@ -140,8 +148,8 @@ def restock():
     print('Type (2) return to Main Menu')
     selector = input('Typed: ')
     if selector == '1':
-        print('What do you want to restock (list from: CoffeeBeans / Milk / Sugar) and how much?')
-        print('Exaple: Milk, 1000')
+        print('What do you want to restock (list from: CoffeeBeans / Milk / Sugar) and how much €?')
+        print('Exaple: Milk, 100')
         what, how_much = input('Type here : ').split(',')
         print()
         restock_item(what,how_much)
@@ -165,7 +173,7 @@ def stock_menu():
         last_stock = check_stock()
         print(f'Coffee beans remains {last_stock[0]} packs')
         print(f'Milk remains {last_stock[1]} ml')
-        print(f'Sugar remains {last_stock[0]} packs')
+        print(f'Sugar remains {last_stock[2]} packs')
         stock_menu()
     elif selector == '2':
         restock()
@@ -173,6 +181,9 @@ def stock_menu():
         main()
     else:
         wrong_selection()
+        
+# def end_of_day():
+    
 
 while True:
     main()
@@ -186,7 +197,7 @@ while True:
     elif selector == '2':
         stock_menu()
     elif selector == '3':
-        print('End of the day count')
+        end_of_day()
     elif selector == '4':
         print('Exit')
         break
