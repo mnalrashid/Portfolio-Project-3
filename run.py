@@ -31,6 +31,13 @@ def wrong_selection():
     print()
     return True
 
+def check_stock():
+    stock_worksheet = SHEET.worksheet('stock')
+    stocks = stock_worksheet.get_all_values()
+    last_stock = stocks[-1]    
+    last_stock = [int(x) for x in last_stock]
+    return last_stock
+
 def update_sales(drinks, amount):
     sales = [drinks[0],drinks[1],drinks[2],amount]
     print('updating data')
@@ -39,44 +46,50 @@ def update_sales(drinks, amount):
     print('Sales Updated')
     
 def update_stock(stock):
-    print('Updating Stock')
-    stock_worksheet = SHEET.worksheet('stock')
-    stocks = stock_worksheet.get_all_values()
-    last_stock = stocks[-1]    
-    last_stock = [int(x) for x in last_stock]
+    print('Updating Stock')    
+    last_stock = check_stock()
+    print(f'last stock count is {last_stock}')
     for x in range(len(last_stock)):
         last_stock[x] = last_stock[x] - stock[x]
+    stock_worksheet = SHEET.worksheet('stock')
     stock_worksheet.append_row(last_stock)
     print('Stock Updated')
 
 def item_added(value, amount):
     if value == '1':
         drinks[0] = drinks[0] + 1
-        amount = amount + 3
+        amount = amount + 3.20
         stock[0] = stock[0] + 40
         stock[2] = stock[2] + 10
         sales_menu(drinks, amount)
     elif value == '2':
         drinks[1] = drinks[1] + 1
-        amount = amount + 4
+        amount = amount + 4.50
         stock[0] = stock[0] + 30
         stock[1] = stock[1] + 20
         stock[2] = stock[2] + 20
         sales_menu(drinks, amount)
     elif value == '3':
         drinks[2] = drinks[2] + 1
-        amount = amount + 4
+        amount = amount + 5.00
         stock[0] = stock[0] + 20
         stock[1] = stock[1] + 40
         stock[2] = stock[2] + 15
         sales_menu(drinks, amount)
     elif value == '4':
-        print()
-        print(f'Order sent & {amount} paid')
-        update_sales(drinks, amount)
-        update_stock(stock)
-        print()
-        main()
+        last_stock = check_stock()
+        if last_stock > stock:
+            print()
+            print(f'Order sent & {amount} paid')
+            update_sales(drinks, amount)
+            update_stock(stock)
+            print()
+            main()
+        else:
+            print()
+            print('Not enough stock, please RESTOCK')
+            print()
+            #Restock()
     else:
         wrong_selection()
         sales_menu(drinks, amount)
@@ -84,9 +97,9 @@ def item_added(value, amount):
 def sales_menu(drinks, amount):
     print('Sales Menu')
     print()
-    print(f'{drinks[0]} Americano in Cart, Type (1) to add')
-    print(f'{drinks[1]} Cappuccino in cart, Type (2) to add')
-    print(f'{drinks[2]} Latte in cart, Type (3) to add')
+    print(f'{drinks[0]} Americano in the cart, Type (1) to add')
+    print(f'{drinks[1]} Cappuccino in the cart, Type (2) to add')
+    print(f'{drinks[2]} Latte in the cart, Type (3) to add')
     print()
     print(f'Type (4) to Oder send & bill €{amount}.')
     selector = input('Typed: ')
